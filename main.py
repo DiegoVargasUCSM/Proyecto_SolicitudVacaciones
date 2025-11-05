@@ -68,3 +68,25 @@ def eliminar_empleado():
     print("\nEmpleado eliminado correctamente...")
     cursor.close()
     conexion.close()
+
+if __name__ == "__main__":
+    while True:
+        print("\n--- MENÚ ---")
+        print("1. Insertar empleado")
+        print("2. Actualizar empleado")
+        print("3. Eliminar empleado")
+        print("4. Salir")
+
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            insertar_empleado()
+        elif opcion == "2":
+            actualizar_empleado()
+        elif opcion == "3":
+            eliminar_empleado()
+        elif opcion == "4":
+            break
+        else:
+            print("Opción no válida...")
+
