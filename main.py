@@ -5,35 +5,66 @@ def insertar_empleado():
     if not conexion:
         return
     cursor = conexion.cursor()
-    print("\n---Insertar Empleados---")
+    print("\n--- Insertar Empleado ---")
     DNI = int(input("DNI: "))
     nombre = input("Apellidos y nombres: ")
-    fecha = input("Fecha de ingreso: ")
+    fecha = input("Fecha de ingreso (YYYY-MM-DD): ")
     dependencia = input("Dependencia: ")
     cargo = input("Cargo: ")
-    idArea = int(input("ID de Area: "))
+    idArea = int(input("ID de Área: "))
     idSolicitud = int(input("ID de Solicitud: "))
-    tipo = input("Tipo de regimen (DL 1057 o DL 276)")
+    tipo = input("Tipo de régimen (DL 1057 o DL 276): ")
 
-    cursor.callproc('insertar_empleado',[DNI, nombre, fecha, dependencia, cargo, idArea, idSolicitud, tipo])
+    cursor.callproc('insertar_empleado', [DNI, nombre, fecha, dependencia, cargo, idArea, idSolicitud, tipo])
     conexion.commit()
-    print("Empleado insertado correctamente...")
+    print("\nEmpleado insertado correctamente...")
     cursor.close()
     conexion.close()
+
 
 def actualizar_empleado():
     conexion = conectar()
     if not conexion:
         return
-    cursor = conexion.cursor()
-    DNI = input("DNI a actualizar: ") or None
-    nombre = input("Nuevo Apellidos y Nombres: ") or None
-    dependencia = input("Nueva Dependencia: ") or None 
-    cargo = input("Nuevo Cargo: ") or None
-    idArea = input("Nuevo idArea (o vacío): ") or None
-    idSolicitud  = input("Nuevo idSolicitud (o vacío): ") or None
-    cursor.callproc('actualizar_empleado', [DNI, nombre, dependencia, cargo, idArea, idSolicitud])
+    cursor = conexion.cursor(dictionary=True)
+    print("\n--- Actualizar Empleado ---")
+
+    DNI = input("Ingrese el DNI del empleado: ")
+    cursor.execute("SELECT * FROM empleados WHERE DNI = %s", (DNI,))
+    empleado = cursor.fetchone()
+
+    if not empleado:
+        print("No se encontró un empleado con ese DNI...")
+        cursor.close()
+        conexion.close()
+        return
+
+    print("\nDatos actuales del empleado:")
+    for clave, valor in empleado.items():
+        print(f"{clave}: {valor}")
+
+    print("\n--- Ingrese los nuevos datos ---")
+    nueva_dependencia = input("Nueva dependencia: ")
+    nuevo_cargo = input("Nuevo cargo: ")
+    nuevo_id_area = int(input("Nuevo idArea: "))
+    nuevo_id_solicitud = int(input("Nuevo idSolicitud: "))
+
+    cursor.callproc('actualizar_empleado', [DNI, nueva_dependencia, nuevo_cargo, nuevo_id_area, nuevo_id_solicitud])
     conexion.commit()
-    print("Empleado actualizado correctamente...")
+    print("\nDatos actualizados correctamente...")
+    cursor.close()
+    conexion.close()
+
+
+def eliminar_empleado():
+    conexion = conectar()
+    if not conexion:
+        return
+    cursor = conexion.cursor()
+    print("\n--- Eliminar Empleado ---")
+    DNI = int(input("DNI del empleado: "))
+    cursor.callproc('eliminar_empleado', [DNI])
+    conexion.commit()
+    print("\nEmpleado eliminado correctamente...")
     cursor.close()
     conexion.close()
