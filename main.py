@@ -26,11 +26,12 @@ def actualizar_empleado():
     conexion = conectar()
     if not conexion:
         return
+
     cursor = conexion.cursor(dictionary=True)
     print("\n--- Actualizar Empleado ---")
 
     DNI = input("Ingrese el DNI del empleado: ")
-    cursor.execute("SELECT * FROM empleados WHERE DNI = %s", (DNI,))
+    cursor.execute("SELECT * FROM Empleado WHERE DNI = %s", (DNI,))
     empleado = cursor.fetchone()
 
     if not empleado:
@@ -52,8 +53,10 @@ def actualizar_empleado():
     cursor.callproc('actualizar_empleado', [DNI, nueva_dependencia, nuevo_cargo, nuevo_id_area, nuevo_id_solicitud])
     conexion.commit()
     print("\nDatos actualizados correctamente...")
+
     cursor.close()
     conexion.close()
+
 
 
 def eliminar_empleado():
