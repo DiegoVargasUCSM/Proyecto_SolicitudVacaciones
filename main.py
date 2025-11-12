@@ -77,14 +77,24 @@ def mostrar_reporte(nombre_reporte):
         return
     cursor = conexion.cursor()
     cursor.callproc(nombre_reporte)
-    
-    print(f"\n--- Resultado del {nombre_reporte} ---")
+    print(f"\n--- Resultado del {nombre_reporte} ---\n")
     for resultado in cursor.stored_results():
         filas = resultado.fetchall()
+        columnas = [desc[0] for desc in resultado.description]
+        anchos = []
+        for i in range(len(columnas)):
+            max_fila = max((len(str(f[i])) for f in filas), default=0)
+            anchos.append(max(len(columnas[i]), max_fila) + 2)
+
+        encabezado = " | ".join(f"{col:<{anchos[i]}}" for i, col in enumerate(columnas))
+        print(encabezado)
+        print("-" * len(encabezado))
+
         for fila in filas:
-            print(fila)
+            print(" | ".join(f"{str(fila[i]):<{anchos[i]}}" for i in range(len(fila))))
     cursor.close()
     conexion.close()
+
 
 def menu_reportes():
     while True:
