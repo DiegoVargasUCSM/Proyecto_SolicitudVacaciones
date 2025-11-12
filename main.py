@@ -131,7 +131,8 @@ if __name__ == "__main__":
         print("1. Insertar empleado")
         print("2. Actualizar empleado")
         print("3. Eliminar empleado")
-        print("4. Salir")
+        print ("4. Ver reportes")
+        print("5. Salir")
 
         opcion = input("Seleccione una opción: ")
 
@@ -142,6 +143,8 @@ if __name__ == "__main__":
         elif opcion == "3":
             eliminar_empleado()
         elif opcion == "4":
+            menu_reportes()
+        elif opcion == "5":
             break
         else:
             print("Opción no válida...")
