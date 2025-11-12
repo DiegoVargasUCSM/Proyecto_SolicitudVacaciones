@@ -77,14 +77,53 @@ def mostrar_reporte(nombre_reporte):
         return
     cursor = conexion.cursor()
     cursor.callproc(nombre_reporte)
-
-    print("\n--- Resultado del {nombre_reporte} ---")
+    
+    print(f"\n--- Resultado del {nombre_reporte} ---")
     for resultado in cursor.stored_results():
         filas = resultado.fetchall()
         for fila in filas:
             print(fila)
     cursor.close()
     conexion.close()
+
+def menu_reportes():
+    while True:
+        print("\n--- MENÚ DE REPORTES ---")
+        print ("1. Colaboradores por regimen laboral")
+        print ("2. Vacaciones por mes")
+        print ("3. Empleados y cargos")
+        print ("4. Colaboradores con vacaciones solicitadas")
+        print ("5. Cruces de periodos vacacionales")
+        print ("6. Dias disponibles de vacaciones")
+        print ("7. Cargos y fechas de vacaciones")
+        print ("8. Total de colaboradores por area")
+        print ("9. Solicitudes ordenadas por fecha")
+        print ("10. Observaciones registradas")
+        print ("0. Volver al menu principal....")
+        opcion = input("Seleccione una opcion: ")
+
+        if opcion == "1":
+            mostrar_reporte('reporte_colaboradores_por_regimen')
+        elif opcion == "2":
+            mostrar_reporte('reporte_vacaciones_por_mes')
+        elif opcion == "3":
+            mostrar_reporte('reporte_empleados_cargo')
+        elif opcion == "4":
+            mostrar_reporte('reporte_colaboradores_con_vacaciones')
+        elif opcion == "5":
+            mostrar_reporte('reporte_cruce_vacaciones')
+        elif opcion == "6":
+            mostrar_reporte('reporte_dias_disponibles')
+        elif opcion == "7":
+            mostrar_reporte('reporte_cargos_vacaciones')
+        elif opcion == "8":
+            mostrar_reporte('reporte_colaboradores_por_area')
+        elif opcion == "9":
+            mostrar_reporte('reporte_solicitudes_ordenadas')
+        elif opcion == "10":
+            mostrar_reporte('reporte_observaciones')
+        elif opcion == "0":
+            break
 
 if __name__ == "__main__":
     while True:
