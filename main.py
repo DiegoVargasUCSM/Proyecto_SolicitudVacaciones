@@ -48,9 +48,8 @@ def actualizar_empleado():
     nueva_dependencia = input("Nueva dependencia: ")
     nuevo_cargo = input("Nuevo cargo: ")
     nuevo_id_area = int(input("Nuevo idArea: "))
-    nuevo_id_solicitud = int(input("Nuevo idSolicitud: "))
 
-    cursor.callproc('actualizar_empleado', [DNI, nueva_dependencia, nuevo_cargo, nuevo_id_area, nuevo_id_solicitud])
+    cursor.callproc('actualizar_empleado', [DNI, nueva_dependencia, nuevo_cargo, nuevo_id_area])
     conexion.commit()
     print("\nDatos actualizados correctamente...")
 
@@ -69,6 +68,21 @@ def eliminar_empleado():
     cursor.callproc('eliminar_empleado', [DNI])
     conexion.commit()
     print("\nEmpleado eliminado correctamente...")
+    cursor.close()
+    conexion.close()
+
+def mostrar_reporte(nombre_reporte):
+    conexion = conectar()
+    if not conexion:
+        return
+    cursor = conexion.cursor()
+    cursor.callproc(nombre_reporte)
+
+    print("\n--- Resultado del {nombre_reporte} ---")
+    for resultado in cursor.stored_results():
+        filas = resultado.fetchall()
+        for fila in filas:
+            print(fila)
     cursor.close()
     conexion.close()
 
