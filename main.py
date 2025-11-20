@@ -102,8 +102,6 @@ def eliminar_empleado():
     conexion.close()
 
 
-# -------------------- REPORTES --------------------
-
 def mostrar_reporte(nombre_reporte):
     conexion = conectar()
     if not conexion:
@@ -118,18 +116,15 @@ def mostrar_reporte(nombre_reporte):
         filas = resultado.fetchall()
         columnas = [desc[0] for desc in resultado.description]
 
-        # Calcular anchos uniformes
         anchos = []
         for i in range(len(columnas)):
             max_fila = max((len(str(f[i])) for f in filas), default=0)
             anchos.append(max(len(columnas[i]), max_fila) + 2)
 
-        # Encabezado
         encabezado = " | ".join(f"{col:<{anchos[i]}}" for i, col in enumerate(columnas))
         print(encabezado)
         print("-" * len(encabezado))
 
-        # Filas
         for fila in filas:
             print(" | ".join(f"{str(fila[i]):<{anchos[i]}}" for i in range(len(fila))))
 
